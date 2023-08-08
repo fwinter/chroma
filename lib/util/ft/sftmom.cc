@@ -215,6 +215,68 @@ namespace Chroma
     init(mom2_max, origin_offset_, mom_off, avg_mom, j_decay) ;
   }
 
+
+  // repeat as create
+
+  void SftMom::create(int mom2_max, bool avg_mom, int j_decay)
+  {
+    multi1d<int> origin_off(Nd);
+    multi1d<int> mom_off;
+
+    if ((j_decay<0)||(j_decay>=Nd)) {
+      mom_off.resize(Nd) ;
+    } else {
+      mom_off.resize(Nd-1) ;
+    }
+
+    origin_off = 0 ;
+    mom_off = 0 ;
+
+    init(mom2_max, origin_off, mom_off, avg_mom, j_decay) ;
+  }
+
+  void SftMom::create(const multi2d<int> & moms , int j_decay)
+  {
+    decay_dir = j_decay;
+		
+    multi1d<int> orig(Nd);
+
+
+    for(int i = 0 ; i < Nd ; ++i)
+      orig[i] = 0;
+		
+    init(0, orig, orig , false, decay_dir);
+		
+    num_mom = moms.size2();
+    mom_list = moms;
+
+    phases.resize(num_mom);
+
+
+    for (int m = 0 ; m < num_mom ; ++m)
+    {
+      phases[m] = singlePhase(orig, mom_list[m], decay_dir);
+    }
+
+  }
+
+  void SftMom::create(int mom2_max, multi1d<int> origin_offset_, bool avg_mom,
+                 int j_decay)
+  {
+    multi1d<int> mom_off;
+
+    if ((j_decay<0)||(j_decay>=Nd)) {
+      mom_off.resize(Nd) ;
+    } else {
+      mom_off.resize(Nd-1) ;
+    }
+    mom_off = 0 ;
+
+    init(mom2_max, origin_offset_, mom_off, avg_mom, j_decay) ;
+  }
+
+
+  
   size_t
   SftMom::numSites() const
   {
@@ -241,7 +303,7 @@ namespace Chroma
     mom_offset    = mom_off;    // private copy
     avg_equiv_mom = avg_mom;    // private copy
 
-    sft_set.make(TimeSliceFunc(j_decay)) ;
+    sft_set.make(TimeSliceFunc(j_decay));
 
     // determine the number of momenta with mom^2 <= (mom_max)^2
     // If avg_equiv_mom is true then only consider momenta with

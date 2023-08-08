@@ -467,7 +467,7 @@ namespace Chroma
       //
       // Initialize the slow Fourier transform phases
       //
-      SftMom phases(params.param.mom2_max, false, params.param.decay_dir);
+      SftMom phases;
 
       //
       // If a list of momenta has been specified only need phases corresponding to these
@@ -481,9 +481,12 @@ namespace Chroma
 	  {
 	    moms[i] = params.param.mom_list[i];
 	  }
-	SftMom temp_phases(moms, params.param.decay_dir);
-	phases = temp_phases;
+	phases.create(moms, params.param.decay_dir);
 	params.param.mom2_min = 0;
+      }
+      else
+      {
+	phases.create(params.param.mom2_max, false, params.param.decay_dir);
       }
 
       //

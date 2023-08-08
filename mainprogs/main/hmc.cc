@@ -755,6 +755,8 @@ int main(int argc, char *argv[])
   Layout::create();
   QDPIO::cout << "Finished with QDP create layout" << std::endl;
 
+  MG::push( {4,4,4,4} );
+  
   proginfo(xml_out);    // Print out basic program info
   proginfo(xml_log);    // Print out basic program info
 
@@ -922,6 +924,9 @@ int main(int argc, char *argv[])
 
   END_CODE();
 
+  MG::pop();
+   
+  
   Chroma::finalize();
   exit(0);
 }

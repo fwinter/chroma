@@ -53,6 +53,28 @@ namespace Chroma
     SftMom(const SftMomParams_t& p)
       { init(p.mom2_max, p.origin_offset, p.mom_offset, p.avg_equiv_mom, p.decay_dir); }
 
+
+    // repeat as create members
+    void create(int mom2_max, bool avg_equiv_mom_=false, int j_decay=-1);
+    
+    //! Constructor about origin, with a list of momenta 
+    void create(const multi2d<int> & moms , int j_decay=-1);
+
+    //! Construct around some fixed origin_offset
+    void create(int mom2_max, multi1d<int> origin_offset_,
+		bool avg_equiv_mom_=false, int j_decay=-1) ;
+
+    //! Construct around some fixed origin_offset and mom_offset
+    void create(int mom2_max, multi1d<int> origin_offset_, multi1d<int> mom_offset_,
+	   bool avg_equiv_mom_=false, int j_decay=-1) 
+    { init(mom2_max, origin_offset_, mom_offset_, avg_equiv_mom_, j_decay); }
+
+    //! General constructor
+    void create(const SftMomParams_t& p)
+    { init(p.mom2_max, p.origin_offset, p.mom_offset, p.avg_equiv_mom, p.decay_dir); }
+
+
+    
     //! The set to be used in sumMulti
     const Set& getSet() const { return sft_set; }
 
@@ -112,9 +134,12 @@ namespace Chroma
     multi2d<DComplex> sft(const LatticeComplexD& cf, int subset_color) const;
 #endif
 
-  private:
     SftMom() {} // hide default constructor
 
+    SftMom & operator=(const SftMom&) = delete;
+    SftMom(const SftMom&) = delete;
+
+  private:
     void init(int mom2_max, multi1d<int> origin_offset, multi1d<int> mom_offset,
 	      bool avg_mom_=false, int j_decay=-1);
 

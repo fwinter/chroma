@@ -680,9 +680,9 @@ namespace Chroma
     forEach(tri_dia, addr_leaf, NullCombine());
     forEach(tri_off, addr_leaf, NullCombine());
 
-    int th_count = Layout::sitesOnNode();
+    int th_count = MG::get( f0.get_layout_ref() ).sitesOnNode();
 
-    WorkgroupGuardExec workgroupGuardExec(th_count);
+    WorkgroupGuardExec workgroupGuardExec(th_count,th_count);
 
     std::vector<QDPCache::ArgKey> ids;
     workgroupGuardExec.check(ids);
@@ -715,7 +715,7 @@ namespace Chroma
     WorkgroupGuard workgroupGuard;
     ParamRef p_site_table = llvm_add_param<int*>();
 
-    ParamLeafScalar param_leaf;
+    ParamLeafScalar param_leaf(workgroupGuard);
     
     typedef typename LeafFunctor<RealT, ParamLeafScalar>::Type_t  RealTJIT;
     RealTJIT diag_mass_jit(forEach(diag_mass, param_leaf, TreeCombine()));
@@ -944,8 +944,8 @@ namespace Chroma
     forEach(tri_off, addr_leaf, NullCombine());
 
     int th_count = s.numSiteTable();
-
-    WorkgroupGuardExec workgroupGuardExec(th_count);
+    
+    WorkgroupGuardExec workgroupGuardExec( th_count , MG::get( s.get_layout_ref() ).sitesOnNode());
 
     std::vector<QDPCache::ArgKey> ids;
     workgroupGuardExec.check(ids);
@@ -975,7 +975,7 @@ namespace Chroma
     WorkgroupGuard workgroupGuard;
     ParamRef p_site_table = llvm_add_param<int*>();
 
-    ParamLeafScalar param_leaf;
+    ParamLeafScalar param_leaf(workgroupGuard);
 
     typedef typename LeafFunctor<T, ParamLeafScalar>::Type_t  TJIT;
     TJIT tr_log_diag_jit(forEach(tr_log_diag, param_leaf, TreeCombine()));
@@ -1258,7 +1258,7 @@ namespace Chroma
 
     int th_count = s.numSiteTable();
 
-    WorkgroupGuardExec workgroupGuardExec(th_count);
+    WorkgroupGuardExec workgroupGuardExec( th_count , MG::get( s.get_layout_ref() ).sitesOnNode());
 
     JitParam jit_mat( QDP_get_global_cache().addJitParamInt( mat ) );
 
@@ -1293,7 +1293,7 @@ namespace Chroma
 
     ParamRef p_mat    = llvm_add_param<int>();
 
-    ParamLeafScalar param_leaf;
+    ParamLeafScalar param_leaf(workgroupGuard);
 
     typedef typename LeafFunctor<U, ParamLeafScalar>::Type_t  UJIT;
     UJIT B_jit(forEach(B, param_leaf, TreeCombine()));
@@ -1669,7 +1669,7 @@ namespace Chroma
     forEach(tri_off, addr_leaf, NullCombine());
 
     int th_count = s.numSiteTable();
-    WorkgroupGuardExec workgroupGuardExec(th_count);
+    WorkgroupGuardExec workgroupGuardExec( th_count , MG::get( s.get_layout_ref() ).sitesOnNode());
 
     std::vector<QDPCache::ArgKey> ids;
     workgroupGuardExec.check(ids);
@@ -1695,7 +1695,7 @@ namespace Chroma
     WorkgroupGuard workgroupGuard;
     ParamRef p_site_table = llvm_add_param<int*>();
 
-    ParamLeafScalar param_leaf;
+    ParamLeafScalar param_leaf(workgroupGuard);
 
     typedef typename LeafFunctor<T, ParamLeafScalar>::Type_t  TJIT;
     TJIT chi_jit(forEach(chi, param_leaf, TreeCombine()));

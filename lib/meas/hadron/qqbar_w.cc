@@ -106,8 +106,7 @@ namespace Chroma
     QDPIO::cout<<"Starting the qqbar code\n";
 
     // Length of lattice in decay direction
-    Set sft_set(phases.getSet()) ;
-    int length(sft_set.numSubsets());
+    int length = phases.numSubsets();
     //QDPIO::cout<<"Time length: "<<length<<std::endl ;
 
     // Construct the anti-quark propagator from quark_prop_2
@@ -167,8 +166,8 @@ namespace Chroma
     QDPIO::cout<<"Starting the qqbar code\n";
 
     // Length of lattice in decay direction
-    Set sft_set(phases.getSet()) ;
-    int length(sft_set.numSubsets());
+    int length = phases.numSubsets();
+
     //QDPIO::cout<<"Time length: "<<length<<std::endl ;
 
     // Construct the anti-quark propagator from quark_prop_2

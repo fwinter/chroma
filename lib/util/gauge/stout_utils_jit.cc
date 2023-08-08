@@ -29,9 +29,9 @@ void function_get_fs_bs_exec(JitFunction& function,
   int junk_9 = forEach(b2[1], addr_leaf, NullCombine());
   int junk_10= forEach(b2[2], addr_leaf, NullCombine());
 
-  int th_count = Layout::sitesOnNode();
+  int th_count = MG::get( Q.get_layout_ref() ).sitesOnNode();
   
-  WorkgroupGuardExec workgroupGuardExec(th_count);
+  WorkgroupGuardExec workgroupGuardExec( th_count , th_count );
 
   JitParam jit_dobs( QDP_get_global_cache().addJitParamBool( dobs ) );
   
@@ -80,7 +80,7 @@ void function_get_fs_bs_build(JitFunction& function,
 
   ParamRef p_dobs   = llvm_add_param<bool>();
 
-  ParamLeafScalar param_leaf;
+  ParamLeafScalar param_leaf(workgroupGuard);
   
   typedef typename LeafFunctor<LatticeColorMatrix, ParamLeafScalar>::Type_t  LCMJIT;
   typedef typename LeafFunctor<LatticeComplex    , ParamLeafScalar>::Type_t  LCJIT;
